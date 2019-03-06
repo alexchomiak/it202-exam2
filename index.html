@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>repl.it</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+	 crossorigin="anonymous">
+	<style>
+		.template {
+			display: none;
+		}
+        .temp {
+            display: none;
+        }
+        .tempnum {
+            display: none;
+        }
+    .Pass {color: green;}
+    .Fail {color: red;}
+	</style>
+
+</head>
+
+<body>
+
+  <input type="text" id="zip">
+  <button id="search">Search</button>
+
+
+
+	<div class="card template" style="width: 18rem;">
+		<div class="card-body">
+			<h5 class="card-title">Card title</h5>
+			<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+			<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+			<a href="#" class="card-link">Card link</a>
+			<a href="#" class="card-link">Another link</a>
+		</div>
+    </div>
+    
+
+    <ul class="list-group">
+        <li class= "temp list-group-item d-flex justify-content-between align-items-center">
+                <span class="tempnum badge badge-primary badge-pill">14</span>
+        </li>   
+    </div> 
+    </ul>
+    <div id="cards"></div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+
+	</script>
+
+	<script>
+		$(document).ready(function(){
+
+            console.log("hello")
+      var endpoint = "https://data.cityofchicago.org/resource/xzkq-xp2w.json";
+
+
+      $("#search").on("click", function() {
+        // clear the display
+        $("#cards").empty();
+        var searchString = $("#zip").val();
+        console.log(searchString);
+        var url = endpoint + "&zip=" + searchString;
+        console.log(url);
+    })
+
+    var departments = []
+      $.get(endpoint, function(response) {
+          console.log(response);
+          var data = response;
+
+          $.each(data, function(i,v){
+            // clone card
+            var clone = $(".temp").clone();
+           
+            var str = v.department;
+            str = str.substring(0,5);
+            clone.text(v.department)
+            clone.addClass(str)
+            clone.removeClass("temp")
+
+           
+
+            // insert into DOM
+            if($("." + str).length == 0) {
+                $(".list-group").append(clone);
+                console.log(v.department)
+                $("." + str).click(() => {
+                    console.log($("." + str).text())
+                    $.get(endpoint, (response) => {
+                        $.each(data, (i,n) => {
+                            var clone2 = $(".template").clone()
+                            //console.log(n);
+                            $("#cards").empty()
+                            clone.find("card-title").text(n.name);
+                            clone.find("card-subtitle").text(n.annual_salary)
+                            clone2.removeClass("template")
+                            $("#cards").append(clone2)
+                        })
+                    })
+                })
+            }
+          });
+
+
+     
+
+      });
+
+
+
+
+
+    });
+	</script>
+
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+	 crossorigin="anonymous">
+
+	</script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+	 crossorigin="anonymous">
+
+	</script>
+	</script>
+</body>
+
+</html>
