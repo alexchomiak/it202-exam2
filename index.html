@@ -91,11 +91,12 @@
                 console.log(v.department)
                 $("." + str).click(() => {
                     console.log($("." + str).text())
+                    $("#cards").empty()
                     $.get(endpoint, (response) => {
                         $.each(data, (i,n) => {
                             var clone2 = $(".template").clone()
-                            //console.log(n);
-                            $("#cards").empty()
+                            console.log(n);
+                          
                             clone.find("card-title").text(n.name);
                             clone.find("card-subtitle").text(n.annual_salary)
                             clone2.removeClass("template")
